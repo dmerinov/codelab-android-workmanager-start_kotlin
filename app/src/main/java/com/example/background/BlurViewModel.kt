@@ -24,6 +24,7 @@ import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
@@ -58,6 +59,11 @@ class BlurViewModel(application: Application) : ViewModel() {
      * @param blurLevel The amount to blur the image
      */
     internal fun applyBlur(blurLevel: Int) {
+
+        //append this to workManager to make this work only if the device is loading
+        val constraints = Constraints.Builder()
+            .setRequiresCharging(true)
+            .build()
         // Add WorkRequest to Cleanup temporary images
         // WITH beginUniqueWork it is granted that this work finishes after the following one starts.
         var continuation = workManager

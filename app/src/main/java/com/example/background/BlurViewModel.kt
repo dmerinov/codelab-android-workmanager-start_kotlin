@@ -32,6 +32,8 @@ import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import com.example.background.workers.BlurWorker
 import com.example.background.workers.CleanupWorker
+import com.example.background.workers.makeStatusNotification
+import com.example.background.workers.sleep
 
 
 class BlurViewModel(application: Application) : ViewModel() {
@@ -88,6 +90,11 @@ class BlurViewModel(application: Application) : ViewModel() {
 
         // Actually start the work
         continuation.enqueue()
+    }
+
+    internal fun cancelWork(application: Application) {
+        workManager.cancelUniqueWork(IMAGE_MANIPULATION_WORK_NAME)
+        makeStatusNotification("cancelling work", application)
     }
 
     private fun uriOrNull(uriString: String?): Uri? {
